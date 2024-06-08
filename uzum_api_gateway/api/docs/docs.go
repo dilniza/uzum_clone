@@ -40,7 +40,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/category_service.CreateCategory"
+                            "$ref": "#/definitions/catalog_service.CreateCategory"
                         }
                     }
                 ],
@@ -48,7 +48,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/category_service.Category"
+                            "$ref": "#/definitions/catalog_service.Category"
                         }
                     },
                     "404": {
@@ -97,7 +97,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/category_service.Category"
+                            "$ref": "#/definitions/catalog_service.Category"
                         }
                     },
                     "404": {
@@ -145,7 +145,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/category_service.UpdateCategory"
+                            "$ref": "#/definitions/catalog_service.UpdateCategory"
                         }
                     }
                 ],
@@ -153,7 +153,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/category_service.Category"
+                            "$ref": "#/definitions/catalog_service.Category"
                         }
                     },
                     "404": {
@@ -200,7 +200,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/category_service.Empty"
+                            "$ref": "#/definitions/catalog_service.Empty"
                         }
                     },
                     "404": {
@@ -218,14 +218,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/getlistCategory": {
-            "post": {
+        "/getallcategory": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "API for getting list categories",
+                "description": "API for getting all categories",
                 "consumes": [
                     "application/json"
                 ],
@@ -235,15 +235,135 @@ const docTemplate = `{
                 "tags": [
                     "category"
                 ],
-                "summary": "Get List Categories",
+                "summary": "Get All Categories",
                 "parameters": [
                     {
-                        "description": "category",
-                        "name": "category",
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.GetAllCategoryResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/getallproduct": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for getting all products",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get All Products",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.GetAllProductResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for creating a product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create a product",
+                "parameters": [
+                    {
+                        "description": "product",
+                        "name": "product",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/category_service.GetListCategoryRequest"
+                            "$ref": "#/definitions/catalog_service.CreateProduct"
                         }
                     }
                 ],
@@ -251,7 +371,159 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/category_service.GetListCategoryResponse"
+                            "$ref": "#/definitions/catalog_service.Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for getting a single product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get a single product by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for updating a product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update a product by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "product",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.UpdateProduct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for deleting a product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete a product by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/catalog_service.Empty"
                         }
                     },
                     "404": {
@@ -271,7 +543,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "category_service.Category": {
+        "catalog_service.Category": {
             "type": "object",
             "properties": {
                 "active": {
@@ -309,7 +581,7 @@ const docTemplate = `{
                 }
             }
         },
-        "category_service.CreateCategory": {
+        "catalog_service.CreateCategory": {
             "type": "object",
             "properties": {
                 "active": {
@@ -335,30 +607,63 @@ const docTemplate = `{
                 }
             }
         },
-        "category_service.Empty": {
-            "type": "object"
-        },
-        "category_service.GetListCategoryRequest": {
+        "catalog_service.CreateProduct": {
             "type": "object",
             "properties": {
-                "limit": {
-                    "type": "integer"
+                "active": {
+                    "type": "boolean"
                 },
-                "offset": {
-                    "type": "integer"
-                },
-                "search": {
+                "description_en": {
                     "type": "string"
+                },
+                "description_ru": {
+                    "type": "string"
+                },
+                "description_uz": {
+                    "type": "string"
+                },
+                "discount_percent": {
+                    "type": "number"
+                },
+                "image": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "in_price": {
+                    "type": "number"
+                },
+                "left_count": {
+                    "type": "integer"
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "order_no": {
+                    "type": "integer"
+                },
+                "out_price": {
+                    "type": "number"
                 }
             }
         },
-        "category_service.GetListCategoryResponse": {
+        "catalog_service.Empty": {
+            "type": "object"
+        },
+        "catalog_service.GetAllCategoryResponse": {
             "type": "object",
             "properties": {
                 "Categorys": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/category_service.Category"
+                        "$ref": "#/definitions/catalog_service.Category"
                     }
                 },
                 "Count": {
@@ -366,7 +671,83 @@ const docTemplate = `{
                 }
             }
         },
-        "category_service.UpdateCategory": {
+        "catalog_service.GetAllProductResponse": {
+            "type": "object",
+            "properties": {
+                "Count": {
+                    "type": "integer"
+                },
+                "Products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/catalog_service.Product"
+                    }
+                }
+            }
+        },
+        "catalog_service.Product": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "integer"
+                },
+                "description_en": {
+                    "type": "string"
+                },
+                "description_ru": {
+                    "type": "string"
+                },
+                "description_uz": {
+                    "type": "string"
+                },
+                "discount_percent": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "in_price": {
+                    "type": "number"
+                },
+                "left_count": {
+                    "type": "integer"
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "order_no": {
+                    "type": "integer"
+                },
+                "out_price": {
+                    "type": "number"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "catalog_service.UpdateCategory": {
             "type": "object",
             "properties": {
                 "active": {
@@ -392,6 +773,56 @@ const docTemplate = `{
                 },
                 "slug": {
                     "type": "string"
+                }
+            }
+        },
+        "catalog_service.UpdateProduct": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "description_en": {
+                    "type": "string"
+                },
+                "description_ru": {
+                    "type": "string"
+                },
+                "description_uz": {
+                    "type": "string"
+                },
+                "discount_percent": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "in_price": {
+                    "type": "number"
+                },
+                "left_count": {
+                    "type": "integer"
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "order_no": {
+                    "type": "integer"
+                },
+                "out_price": {
+                    "type": "number"
                 }
             }
         },

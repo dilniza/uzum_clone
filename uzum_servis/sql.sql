@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "category" (
+CREATE TABLE category (
     id UUID PRIMARY KEY,
     slug VARCHAR(255) UNIQUE NOT NULL,
     name_uz VARCHAR(20) DEFAULT '',
@@ -12,8 +12,9 @@ CREATE TABLE IF NOT EXISTS "category" (
     deleted_at INTEGER DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS "product" (
-    id UUID PRIMARY KEY DEFAULT,
+
+CREATE TABLE product (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug VARCHAR(255) UNIQUE NOT NULL,
     name_uz VARCHAR(20) DEFAULT '',
     name_ru VARCHAR(20) DEFAULT '',
@@ -28,8 +29,8 @@ CREATE TABLE IF NOT EXISTS "product" (
     left_count INTEGER,
     discount_percent FLOAT DEFAULT 0,
     image TEXT ARRAY,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW(),
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     deleted_at INTEGER DEFAULT 0
 );
 

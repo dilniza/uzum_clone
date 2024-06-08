@@ -1,10 +1,10 @@
 package grpc_client
 
 import (
-	pc "api/genproto/catalog_service"
 	"fmt"
+	pc "service/genproto/catalog_service"
 
-	"api/config"
+	"service/config"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -13,7 +13,6 @@ import (
 // GrpcClientI ...
 type GrpcClientI interface {
 	CategoryService() pc.CategoryServiceClient
-	ProductService() pc.ProductServiceClient
 }
 
 // GrpcClient ...
@@ -26,27 +25,22 @@ type GrpcClient struct {
 func New(cfg config.Config) (*GrpcClient, error) {
 
 	connCategory, err := grpc.Dial(
-		fmt.Sprintf("%s:%s", cfg.CatalogServiceHost, cfg.CatalogServicePort),
+		fmt.Sprintf("%s:%s", cfg.CategoryServiceHost, cfg.CategoryGRPCPort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		return nil, fmt.Errorf("category service dial host: %s port:%s err: %s",
-			cfg.CatalogServiceHost, cfg.CatalogServicePort, err)
+			cfg.CategoryServiceHost, cfg.CategoryGRPCPort, err)
 	}
 
 	return &GrpcClient{
 		cfg: cfg,
 		connections: map[string]interface{}{
 			"category_service": pc.NewCategoryServiceClient(connCategory),
-			"product_service":  pc.NewProductServiceClient(connCategory),
 		},
 	}, nil
 }
 
 func (g *GrpcClient) CategoryService() pc.CategoryServiceClient {
 	return g.connections["category_service"].(pc.CategoryServiceClient)
-}
-
-func (g *GrpcClient) ProductService() pc.ProductServiceClient {
-	return g.connections["product_service"].(pc.ProductServiceClient)
 }

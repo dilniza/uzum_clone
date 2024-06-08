@@ -18,8 +18,8 @@ type Config struct {
 	// RedisPort     int
 	// RedisPassword string
 
-	CategoryServiceHost string
-	CategoryServicePort string
+	CatalogServiceHost string
+	CatalogServicePort string
 
 	LogLevel string
 	HTTPPort string
@@ -39,8 +39,8 @@ func Load() Config {
 	// c.RedisPort = cast.ToInt(getOrReturnDefault("REDIS_PORT", 6379))
 	// c.RedisPassword = cast.ToString(getOrReturnDefault("REDIS_PASSWORD", "3EEdwhDOfx"))
 
-	c.CategoryServiceHost = cast.ToString(getOrReturnDefault("CATEGORY_SERVICE_HOST", "localhost"))
-	c.CategoryServicePort = cast.ToString(getOrReturnDefault("CATEGORY_GRPC_PORT", "8080"))
+	c.CatalogServiceHost = cast.ToString(getOrReturnDefault("CATALOG_SERVICE_HOST", "localhost"))
+	c.CatalogServicePort = cast.ToString(getOrReturnDefault("CATALOG_GRPC_PORT", "8082"))
 
 	c.LogLevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 	c.HTTPPort = cast.ToString(getOrReturnDefault("HTTP_PORT", ":1234"))

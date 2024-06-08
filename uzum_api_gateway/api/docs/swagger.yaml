@@ -1,5 +1,5 @@
 definitions:
-  category_service.Category:
+  catalog_service.Category:
     properties:
       active:
         type: boolean
@@ -24,7 +24,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  category_service.CreateCategory:
+  catalog_service.CreateCategory:
     properties:
       active:
         type: boolean
@@ -41,27 +41,99 @@ definitions:
       slug:
         type: string
     type: object
-  category_service.Empty:
-    type: object
-  category_service.GetListCategoryRequest:
+  catalog_service.CreateProduct:
     properties:
-      limit:
-        type: integer
-      offset:
-        type: integer
-      search:
+      active:
+        type: boolean
+      description_en:
         type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      discount_percent:
+        type: number
+      image:
+        items:
+          type: string
+        type: array
+      in_price:
+        type: number
+      left_count:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      order_no:
+        type: integer
+      out_price:
+        type: number
     type: object
-  category_service.GetListCategoryResponse:
+  catalog_service.Empty:
+    type: object
+  catalog_service.GetAllCategoryResponse:
     properties:
       Categorys:
         items:
-          $ref: '#/definitions/category_service.Category'
+          $ref: '#/definitions/catalog_service.Category'
         type: array
       Count:
         type: integer
     type: object
-  category_service.UpdateCategory:
+  catalog_service.GetAllProductResponse:
+    properties:
+      Count:
+        type: integer
+      Products:
+        items:
+          $ref: '#/definitions/catalog_service.Product'
+        type: array
+    type: object
+  catalog_service.Product:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: string
+      deleted_at:
+        type: integer
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      discount_percent:
+        type: number
+      id:
+        type: string
+      image:
+        items:
+          type: string
+        type: array
+      in_price:
+        type: number
+      left_count:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      order_no:
+        type: integer
+      out_price:
+        type: number
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  catalog_service.UpdateCategory:
     properties:
       active:
         type: boolean
@@ -79,6 +151,39 @@ definitions:
         type: string
       slug:
         type: string
+    type: object
+  catalog_service.UpdateProduct:
+    properties:
+      active:
+        type: boolean
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      discount_percent:
+        type: number
+      id:
+        type: string
+      image:
+        items:
+          type: string
+        type: array
+      in_price:
+        type: number
+      left_count:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      order_no:
+        type: integer
+      out_price:
+        type: number
     type: object
   models.ResponseError:
     properties:
@@ -98,14 +203,14 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/category_service.CreateCategory'
+          $ref: '#/definitions/catalog_service.CreateCategory'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/category_service.Category'
+            $ref: '#/definitions/catalog_service.Category'
         "404":
           description: Not Found
           schema:
@@ -136,7 +241,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/category_service.Empty'
+            $ref: '#/definitions/catalog_service.Empty'
         "404":
           description: Not Found
           schema:
@@ -166,7 +271,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/category_service.Category'
+            $ref: '#/definitions/catalog_service.Category'
         "404":
           description: Not Found
           schema:
@@ -195,14 +300,14 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/category_service.UpdateCategory'
+          $ref: '#/definitions/catalog_service.UpdateCategory'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/category_service.Category'
+            $ref: '#/definitions/catalog_service.Category'
         "404":
           description: Not Found
           schema:
@@ -216,25 +321,31 @@ paths:
       summary: Update a category by ID
       tags:
       - category
-  /getlistCategory:
-    post:
+  /getallcategory:
+    get:
       consumes:
       - application/json
-      description: API for getting list categories
+      description: API for getting all categories
       parameters:
-      - description: category
-        in: body
-        name: category
-        required: true
-        schema:
-          $ref: '#/definitions/category_service.GetListCategoryRequest'
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Search
+        in: query
+        name: search
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/category_service.GetListCategoryResponse'
+            $ref: '#/definitions/catalog_service.GetAllCategoryResponse'
         "404":
           description: Not Found
           schema:
@@ -245,9 +356,176 @@ paths:
             $ref: '#/definitions/models.ResponseError'
       security:
       - ApiKeyAuth: []
-      summary: Get List Categories
+      summary: Get All Categories
       tags:
       - category
+  /getallproduct:
+    get:
+      consumes:
+      - application/json
+      description: API for getting all products
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Search
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.GetAllProductResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Products
+      tags:
+      - product
+  /product:
+    post:
+      consumes:
+      - application/json
+      description: API for creating a product
+      parameters:
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/catalog_service.CreateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a product
+      tags:
+      - product
+  /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API for deleting a product by ID
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.Empty'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a product by ID
+      tags:
+      - product
+    get:
+      consumes:
+      - application/json
+      description: API for getting a single product by ID
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a single product by ID
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: API for updating a product by ID
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/catalog_service.UpdateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a product by ID
+      tags:
+      - product
 securityDefinitions:
   ApiKeyAuth:
     in: header

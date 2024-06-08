@@ -51,11 +51,17 @@ func New(cnf Config) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"data": "Api gateway"})
 	})
 
-	r.POST("/getlistCategory", handler.GetListCategory)
+	r.GET("/getallcategory", handler.GetAllCategory)
 	r.POST("/category", handler.CreateCategory)
 	r.GET("/category/:id", handler.GetCategoryByID)
 	r.PUT("/category/:id", handler.UpdateCategory)
 	r.DELETE("/category/:id", handler.DeleteCategory)
+	
+	r.GET("/getallproduct", handler.GetAllProduct)
+	r.POST("/product", handler.CreateProduct)
+	r.GET("/product/:id", handler.GetProductByID)
+	r.PUT("/product/:id", handler.UpdateProduct)
+	r.DELETE("/product/:id", handler.DeleteProduct)
 
 	// Shipper endpoints
 	url := ginSwagger.URL("swagger/doc.json") // The url pointing to API definition

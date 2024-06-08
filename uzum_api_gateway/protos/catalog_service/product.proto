@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package genproto;
+option go_package = "genproto/catalog_service";
+
+import "category.proto"; //for empty
+
+service ProductService {
+    rpc Create(CreateProduct) returns (Product) {}
+    rpc GetByID(ProductPrimaryKey) returns (Product) {}
+    rpc GetAll(GetAllProductRequest) returns (GetAllProductResponse) {}
+    rpc Update(UpdateProduct) returns (Product) {}
+    rpc Delete(ProductPrimaryKey) returns (Empty) {}
+}
+
+message ProductPrimaryKey {
+    string id = 1;
+}
+
+message CreateProduct {
+    string name_uz = 1;
+    string name_ru = 2;
+    string name_en = 3;
+    string description_uz = 4;
+    string description_ru = 5;
+    string description_en = 6;
+    bool active = 7;
+    int32 order_no = 8;
+    float in_price = 9;
+    float out_price = 10;
+    int32 left_count = 11;
+    float discount_percent = 12;
+    repeated string image = 13;
+}
+
+message Product {
+    string id = 1;
+    string slug = 2;
+    string name_uz = 3;
+    string name_ru = 4;
+    string name_en = 5;
+    string description_uz = 6;
+    string description_ru = 7;
+    string description_en = 8;
+    bool active = 9;
+    int32 order_no = 10;
+    float in_price = 11;
+    float out_price = 12;
+    int32 left_count = 13;
+    float discount_percent = 14;
+    repeated string image = 15;
+    string created_at = 16;
+    string updated_at = 17;
+    int64 deleted_at = 18;
+}
+
+message UpdateProduct {
+    string id = 1;
+    string name_uz = 2;
+    string name_ru = 3;
+    string name_en = 4;
+    string description_uz = 5;
+    string description_ru = 6;
+    string description_en = 7;
+    bool active = 8;
+    int32 order_no = 9;
+    float in_price = 10;
+    float out_price = 11;
+    int32 left_count = 12;
+    float discount_percent = 13;
+    repeated string image = 14;
+}
+
+message GetAllProductRequest {
+    int64 offset = 1;
+    int64 limit = 2;
+    string search = 3;
+}
+
+message GetAllProductResponse {
+    int64 Count = 1;
+    repeated Product Products = 2;
+}

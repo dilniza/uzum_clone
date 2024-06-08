@@ -10,20 +10,20 @@ import (
 )
 
 // @Security ApiKeyAuth
-// @Router /category [POST]
-// @Summary Create a category
-// @Description API for creating a category
-// @Tags category
+// @Router /product [POST]
+// @Summary Create a product
+// @Description API for creating a product
+// @Tags product
 // @Accept json
 // @Produce json
-// @Param category body catalog_service.CreateCategory true "category"
-// @Success 200 {object} catalog_service.Category
+// @Param product body catalog_service.CreateProduct true "product"
+// @Success 200 {object} catalog_service.Product
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) CreateCategory(c *gin.Context) {
+func (h *Handler) CreateProduct(c *gin.Context) {
 	var (
-		req  catalog_service.CreateCategory
-		resp *catalog_service.Category
+		req  catalog_service.CreateProduct
+		resp *catalog_service.Product
 		err  error
 	)
 
@@ -32,7 +32,7 @@ func (h *Handler) CreateCategory(c *gin.Context) {
 		return
 	}
 
-	resp, err = h.grpcClient.CategoryService().Create(c, &req)
+	resp, err = h.grpcClient.ProductService().Create(c, &req)
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "internal server error")
 		return
@@ -42,28 +42,28 @@ func (h *Handler) CreateCategory(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /category/{id} [GET]
-// @Summary Get a single category by ID
-// @Description API for getting a single category by ID
-// @Tags category
+// @Router /product/{id} [GET]
+// @Summary Get a single product by ID
+// @Description API for getting a single product by ID
+// @Tags product
 // @Accept json
 // @Produce json
-// @Param id path string true "category ID"
-// @Success 200 {object} catalog_service.Category
+// @Param id path string true "product ID"
+// @Success 200 {object} catalog_service.Product
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) GetCategoryByID(c *gin.Context) {
+func (h *Handler) GetProductByID(c *gin.Context) {
 	var (
 		id   = c.Param("id")
-		resp *catalog_service.Category
+		resp *catalog_service.Product
 		err  error
 	)
 
-	req := &catalog_service.CategoryPrimaryKey{
+	req := &catalog_service.ProductPrimaryKey{
 		Id: id,
 	}
 
-	resp, err = h.grpcClient.CategoryService().GetByID(c, req)
+	resp, err = h.grpcClient.ProductService().GetByID(c, req)
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "internal server error")
 		return
@@ -73,19 +73,19 @@ func (h *Handler) GetCategoryByID(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /getallcategory [GET]
-// @Summary Get All Categories
-// @Description API for getting all categories
-// @Tags category
+// @Router /getallproduct [GET]
+// @Summary Get All Products
+// @Description API for getting all products
+// @Tags product
 // @Accept json
 // @Produce json
 // @Param limit query int false "Limit"
 // @Param offset query int false "Offset"
 // @Param search query string false "Search"
-// @Success 200 {object} catalog_service.GetAllCategoryResponse
+// @Success 200 {object} catalog_service.GetAllProductResponse
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) GetAllCategory(c *gin.Context) {
+func (h *Handler) GetAllProduct(c *gin.Context) {
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "Invalid limit")
@@ -100,13 +100,13 @@ func (h *Handler) GetAllCategory(c *gin.Context) {
 
 	search := c.DefaultQuery("search", "")
 
-	req := &catalog_service.GetAllCategoryRequest{
+	req := &catalog_service.GetAllProductRequest{
 		Limit:  int64(limit),
 		Offset: int64(offset),
 		Search: search,
 	}
 
-	resp, err := h.grpcClient.CategoryService().GetAll(c, req)
+	resp, err := h.grpcClient.ProductService().GetAll(c, req)
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "internal server error")
 		return
@@ -116,22 +116,22 @@ func (h *Handler) GetAllCategory(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /category/{id} [PUT]
-// @Summary Update a category by ID
-// @Description API for updating a category by ID
-// @Tags category
+// @Router /product/{id} [PUT]
+// @Summary Update a product by ID
+// @Description API for updating a product by ID
+// @Tags product
 // @Accept json
 // @Produce json
-// @Param id path string true "category ID"
-// @Param category body catalog_service.UpdateCategory true "category"
-// @Success 200 {object} catalog_service.Category
+// @Param id path string true "product ID"
+// @Param product body catalog_service.UpdateProduct true "product"
+// @Success 200 {object} catalog_service.Product
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) UpdateCategory(c *gin.Context) {
+func (h *Handler) UpdateProduct(c *gin.Context) {
 	var (
 		id   = c.Param("id")
-		req  catalog_service.UpdateCategory
-		resp *catalog_service.Category
+		req  catalog_service.UpdateProduct
+		resp *catalog_service.Product
 		err  error
 	)
 
@@ -141,7 +141,7 @@ func (h *Handler) UpdateCategory(c *gin.Context) {
 	}
 
 	req.Id = id
-	resp, err = h.grpcClient.CategoryService().Update(c, &req)
+	resp, err = h.grpcClient.ProductService().Update(c, &req)
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "internal server error")
 		return
@@ -151,28 +151,28 @@ func (h *Handler) UpdateCategory(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /category/{id} [DELETE]
-// @Summary Delete a category by ID
-// @Description API for deleting a category by ID
-// @Tags category
+// @Router /product/{id} [DELETE]
+// @Summary Delete a product by ID
+// @Description API for deleting a product by ID
+// @Tags product
 // @Accept json
 // @Produce json
-// @Param id path string true "category ID"
+// @Param id path string true "product ID"
 // @Success 200 {object} catalog_service.Empty
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) DeleteCategory(c *gin.Context) {
+func (h *Handler) DeleteProduct(c *gin.Context) {
 	var (
 		id   = c.Param("id")
 		err  error
 		resp *catalog_service.Empty
 	)
 
-	req := &catalog_service.CategoryPrimaryKey{
+	req := &catalog_service.ProductPrimaryKey{
 		Id: id,
 	}
 
-	resp, err = h.grpcClient.CategoryService().Delete(c, req)
+	resp, err = h.grpcClient.ProductService().Delete(c, req)
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "internal server error")
 		return
