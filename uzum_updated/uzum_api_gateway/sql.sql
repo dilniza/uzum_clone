@@ -1,4 +1,4 @@
-CREATE TABLE category (
+CREATE TABLE IF NOT EXISTS "category" (
     id UUID PRIMARY KEY,
     slug VARCHAR(255) UNIQUE NOT NULL,
     name_uz VARCHAR(20) DEFAULT '',
@@ -12,9 +12,8 @@ CREATE TABLE category (
     deleted_at INTEGER DEFAULT 0
 );
 
-
-CREATE TABLE products (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXISTS "product" (
+    id UUID PRIMARY KEY DEFAULT,
     slug VARCHAR(255) UNIQUE NOT NULL,
     name_uz VARCHAR(20) DEFAULT '',
     name_ru VARCHAR(20) DEFAULT '',
@@ -28,32 +27,32 @@ CREATE TABLE products (
     out_price FLOAT,
     left_count INTEGER,
     discount_percent FLOAT DEFAULT 0,
-    image TEXT ARRAY,
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
+    image TEXT[],
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at INTEGER DEFAULT 0
 );
 
-CREATE TABLE product_categories (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXISTS "product_categories" (
+    id UUID PRIMARY KEY,
     product_id UUID NOT NULL,
     category_id UUID NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-CREATE TABLE product_reviews (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXISTS "product_reviews" (
+    id UUID PRIMARY KEY,
     customer_id UUID,
     product_id UUID,
     text VARCHAR(500),
     rating FLOAT,
     order_id UUID,
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- UserService
-CREATE TABLE customers (
+CREATE TABLE IF NOT EXISTS "customers" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone VARCHAR(20) UNIQUE NOT NULL,
     gmail VARCHAR(30) UNIQUE NOT NULL,
@@ -65,7 +64,7 @@ CREATE TABLE customers (
     deleted_at INTEGER DEFAULT 0
 );
 
-CREATE TABLE sellers (
+CREATE TABLE IF NOT EXISTS "sellers" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone VARCHAR(20) UNIQUE NOT NULL,
     gmail VARCHAR(30) UNIQUE NOT NULL,
@@ -77,7 +76,7 @@ CREATE TABLE sellers (
     FOREIGN KEY (shop_id) REFERENCES shops(id)
 );
 
-CREATE TABLE system_users (
+CREATE TABLE IF NOT EXISTS "system_users" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone VARCHAR(20) UNIQUE NOT NULL,
     gmail VARCHAR(30) UNIQUE NOT NULL,
@@ -88,7 +87,7 @@ CREATE TABLE system_users (
     deleted_at INTEGER DEFAULT 0
 );
 
-CREATE TABLE branches (
+CREATE TABLE IF NOT EXISTS "branches" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     phone VARCHAR(20) UNIQUE NOT NULL,
     name VARCHAR(20) DEFAULT '',
@@ -102,7 +101,7 @@ CREATE TABLE branches (
     deleted_at INTEGER DEFAULT 0
 );
 
-CREATE TABLE shops (
+CREATE TABLE IF NOT EXISTS "shops" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(20) UNIQUE NOT NULL,
@@ -121,7 +120,7 @@ CREATE TABLE shops (
 );
 
 -- OrderService
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS "orders" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     external_id VARCHAR(255),
     type VARCHAR(20) NOT NULL,
@@ -142,7 +141,7 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
-CREATE TABLE order_products (
+CREATE TABLE IF NOT EXISTS "order_products" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     product_id UUID,
     count INTEGER,
@@ -156,7 +155,7 @@ CREATE TABLE order_products (
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
-CREATE TABLE order_status_notes (
+CREATE TABLE IF NOT EXISTS "order_status_notes" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID,
     status VARCHAR(20) NOT NULL,

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "genproto/catalog_service";
-
 package genproto;
+
+option go_package = "genproto/catalog_service";
 
 service CategoryService {
     rpc Create(CreateCategory) returns (Category) {}

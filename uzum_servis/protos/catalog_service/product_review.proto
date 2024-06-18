@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package genproto;
+
+option go_package = "genproto/catalog_service";
+
+import "category.proto";
+
+service ProductReviewService {
+    rpc Create(CreateProductReview) returns (ProductReview) {}
+    rpc GetByID(ProductReviewPrimaryKey) returns (ProductReview) {}
+    rpc GetAll(GetAllProductReviewRequest) returns (GetAllProductReviewResponse) {}
+    rpc Update(UpdateProductReview) returns (ProductReview) {}
+    rpc Delete(ProductReviewPrimaryKey) returns (Empty) {}
+}
+
+message CreateProductReview {
+    string customer_id = 1;
+    string product_id = 2;
+    string text = 3;
+}
+
+message ProductReview {
+    string id = 1;
+    string customer_id = 2;
+    string product_id = 3;
+    string text = 4;
+    float rating = 5;
+    string order_id = 6;
+    string created_at = 7;
+}
+
+message ProductReviewPrimaryKey {
+    string id = 1;
+}
+
+message UpdateProductReview {
+    string id = 1;
+    string customer_id = 2;
+    string product_id = 3;
+    string text = 4;
+    float rating = 5;
+}
+
+message GetAllProductReviewRequest {
+    int64 offset = 1;
+    int64 limit = 2;
+    string search = 3;
+}
+
+message GetAllProductReviewResponse {
+    int64 Count = 1;
+    repeated ProductReview ProductReviews = 2;
+}

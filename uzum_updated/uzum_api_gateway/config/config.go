@@ -8,18 +8,29 @@ import (
 	"github.com/spf13/cast"
 )
 
-const ()
+const (
+	// DebugMode indicates service mode is debug.
+	DebugMode = "debug"
+	// TestMode indicates service mode is test.
+	TestMode = "test"
+	// ReleaseMode indicates service mode is release.
+	ReleaseMode = "release"
+)
 
 // Config ...
 type Config struct {
 	Environment string
+	Version     string
 
 	// RedisHost     string
 	// RedisPort     int
 	// RedisPassword string
 
-	CategoryServiceHost string
-	CategoryServicePort string
+	CatalogServiceHost string
+	CatalogServicePort string
+
+	UserServiceHost string
+	UserServicePort string
 
 	LogLevel string
 	HTTPPort string
@@ -33,14 +44,18 @@ func Load() Config {
 	}
 	c := Config{}
 
-	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", "prod"))
+	c.Environment = cast.ToString(getOrReturnDefault("ENVIRONMENT", DebugMode))
+	c.Version = cast.ToString(getOrReturnDefault("VERSION", "1.0"))
 
 	// c.RedisHost = cast.ToString(getOrReturnDefault("REDIS_HOST", "127.0.0.1"))
 	// c.RedisPort = cast.ToInt(getOrReturnDefault("REDIS_PORT", 6379))
 	// c.RedisPassword = cast.ToString(getOrReturnDefault("REDIS_PASSWORD", "3EEdwhDOfx"))
 
-	c.CategoryServiceHost = cast.ToString(getOrReturnDefault("CATEGORY_SERVICE_HOST", "localhost"))
-	c.CategoryServicePort = cast.ToString(getOrReturnDefault("CATEGORY_GRPC_PORT", "8080"))
+	c.CatalogServiceHost = cast.ToString(getOrReturnDefault("CATALOG_SERVICE_HOST", "localhost"))
+	c.CatalogServicePort = cast.ToString(getOrReturnDefault("CATALOG_GRPC_PORT", "8082"))
+
+	c.UserServiceHost = cast.ToString(getOrReturnDefault("USER_SERVICE_HOST", "localhost"))
+	c.UserServicePort = cast.ToString(getOrReturnDefault("USER_SEVICE_PORT", "8081"))
 
 	c.LogLevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 	c.HTTPPort = cast.ToString(getOrReturnDefault("HTTP_PORT", ":1234"))

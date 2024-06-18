@@ -51,12 +51,48 @@ func New(cnf Config) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"data": "Api gateway"})
 	})
 
-	r.POST("/getlistCategory", handler.GetListCategory)
+	r.GET("/getallcategory", handler.GetAllCategory)
 	r.POST("/category", handler.CreateCategory)
 	r.GET("/category/:id", handler.GetCategoryByID)
 	r.PUT("/category/:id", handler.UpdateCategory)
 	r.DELETE("/category/:id", handler.DeleteCategory)
+	
+	r.GET("/getallproduct", handler.GetAllProduct)
+	r.POST("/product", handler.CreateProduct)
+	r.GET("/product/:id", handler.GetProductByID)
+	r.PUT("/product/:id", handler.UpdateProduct)
+	r.DELETE("/product/:id", handler.DeleteProduct)
 
+	r.POST("/createCustomer", handler.CreateCustomer)
+	r.GET("/getlistcustomer", handler.GetListCustomer)
+	r.GET("/getbyidcustomer/:id", handler.GetCustomerByID)
+	r.PUT("/updateCustomer/:id", handler.UpdateCustomer)
+	r.DELETE("/deleteCustomer/:id", handler.DeleteCustomer)
+
+	r.POST("/CreateUser", handler.CreateUser)
+	r.GET("/GetListUser", handler.GetListUser)
+	r.GET("/GetByIdUser/:id", handler.GetUserByID)
+	r.PUT("/UpdateUser/:id", handler.UpdateUser)
+	r.DELETE("/DeleteUser/:id", handler.DeleteUser)
+
+	r.POST("/CreateSeller", handler.CreateSeller)
+	r.GET("/GetListSeller", handler.GetListSeller)
+	r.GET("/GetByIdSeller/:id", handler.GetSellerByID)
+	r.PUT("/UpdateSeller/:id", handler.UpdateSeller)
+	r.DELETE("/DeleteSeller/:id", handler.DeleteSeller)
+
+	r.POST("/createBranch", handler.CreateBranch)
+	r.GET("/GetListBranch", handler.GetListBranch)
+	r.GET("/getbyidbranch/:id", handler.GetBranchByID)
+	r.PUT("/updateBranch/:id", handler.UpdateBranch)
+	r.DELETE("/deleteBranch/:id", handler.DeleteBranch)
+
+	r.POST("/CreateShop", handler.CreateShop)
+	r.GET("/GetListShop", handler.GetListShop)
+	r.GET("/GetByIdShop/:id", handler.GetShopByID)
+	r.PUT("/UpdateShop/:id", handler.UpdateShop)
+	r.DELETE("/DeleteShop/:id", handler.DeleteShop)
+	
 	// Shipper endpoints
 	url := ginSwagger.URL("swagger/doc.json") // The url pointing to API definition
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

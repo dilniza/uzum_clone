@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package genproto;
+
+option go_package = "genproto/catalog_service";
+
+import "category.proto";
+
+service ProductCategoryService {
+    rpc Create(CreateProductCategory) returns (ProductCategory) {}
+    rpc GetByID(ProductCategoryPrimaryKey) returns (ProductCategory) {}
+    rpc GetAll(GetAllProductCategoryRequest) returns (GetAllProductCategoryResponse) {}
+    rpc Update(UpdateProductCategory) returns (ProductCategory) {}
+    rpc Delete(ProductCategoryPrimaryKey) returns (Empty) {}
+}
+
+message CreateProductCategory {
+    string product_id = 2;
+    string category_id =3;
+}
+
+message ProductCategory {
+    string id = 1;
+    string product_id = 2;
+    string category_id =3;
+}
+
+message ProductCategoryPrimaryKey {
+    string id = 1;
+}
+
+message UpdateProductCategory {
+    string id = 1;
+    string product_id = 2;
+    string category_id =3;
+}
+
+message GetAllProductCategoryRequest {
+    int64 offset = 1;
+    int64 limit = 2;
+    string search = 3;
+}
+
+message GetAllProductCategoryResponse {
+    int64 Count = 1;
+    repeated ProductCategory ProductCategorys = 2;
+}

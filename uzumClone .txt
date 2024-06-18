@@ -1,0 +1,200 @@
+
+1. User types:
+    - admin
+    - customer
+    - courier
+    - seller
+
+2. Catalog:
+    - category
+        id uuid
+        slug string (generate) unique
+        name_uz varchar(20) default '' 
+        name_ru varchar(20) default ''
+        name_en varchar(20) default ''
+        active boolean default true
+        order_no integer default 0
+        parent_id uuid foreign key
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+        
+        getById(id) (data of this category and array of childCategories)
+        getAll()(array of category[array of child category])
+        getCategoryWithProducts(id)(data of this category and its products,array[childCategories with products])
+
+
+        FastFood parent category(lavash,shaurma products)
+                - sous(child category) (sirniy, ketchup, mayonez product)
+
+
+    - product
+        id uuid
+        slug string (generate) unique
+        name_uz varchar(20) default '' 
+        name_ru varchar(20) default ''
+        name_en varchar(20) default ''
+        description_uz varchar(500) default '' 
+        description_ru varchar(500) default ''
+        description_en varchar(500) default ''
+        active boolean default true
+        order_no integer default 0
+        in_price float 
+        out_price float
+        left_count integer
+        discount_percent float default 0 //percent
+        image array varchar(200)
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    - product_categories(many2many)
+        id uuid 
+        product_id uuid not null
+        category_id uuid not null
+        !constraint product_id_category_id
+    - product_reviews
+        id uuid
+        customer_id uuid
+        product_id uuid 
+        text varchar(500)
+        rating float
+        order_id uuid
+        created_at default now()
+
+3. UserService:
+    - customers
+        id uuid
+        phone varchar(20)
+        gmail varchat(30)
+        language enum(uz,ru,en)
+        date_of_birth
+        gender enum
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique, gmail_deleted_at unique
+
+    Register
+    LoginWithOtp
+    LoginWithPassword
+    ResetPassword
+    ForgotPassword
+    
+    - seller 
+        id uuid
+        phone varchar
+        gmail varchar
+        name varchar
+        shop_id uuid foreign
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique, gmail_deleted_at unique
+
+    LoginWithOtp
+    LoginWithPassword
+    ResetPassword
+    ForgotPassword
+
+    - system_user 
+        id uuid
+        phone varchar
+        gmail varchar
+        name varchar
+        role enum[admin,courier]
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique, gmail_deleted_at unique
+
+    LoginWithOtp
+    LoginWithPassword
+    ResetPassword
+    ForgotPassword
+
+    // 10:30 = 37800
+    // 20:30 = 73800
+    // 18:09 = 65340
+    // open_time < 65340 < close_time
+
+    - branch
+        id uuid
+        phone varchar
+        name varchar(20) default '' 
+        location polygon 
+        address varchar
+        open_time varchar [hh:mm]
+        close_time varchar [hh:mm]
+        active boolean
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique
+    
+    - shop
+        id uuid
+        slug varchar
+        phone varchar
+        name_uz varchar(20) default '' 
+        name_ru varchar(20) default ''
+        name_en varchar(20) default '' // Backend golang. бакенд голанг backend-golang-hfa74
+        description_uz varchar(500) default '' 
+        description_ru varchar(500) default ''
+        description_en varchar(500) default ''
+        location polygon
+        currency enum[uzs,usd]
+        payment_types []varchar
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique, gmail_deleted_at unique
+
+4. OrderService
+    - orders
+        id uuid
+        external_id varchar // num-000001
+        type enum[self_pickup,delivery]
+        customer_phone varchar(20)
+        customer_name varchar(20)
+        customer_id uuid
+        payment_type enum[uzum, cash, terminal]
+        status enum[waiting_for_payment, collecting, delivery, waiting_on_branch, finished, cancelled]
+        to_address varchar
+        to_location polygon
+        discount_amount float//skidka 20k
+        amount float /all 100k  80k
+        delivery_price float
+        paid boolean false
+        courier_id uuid
+        courier_phone string
+        courier_name string
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+    ! constraint phone_deleted_at unique, gmail_deleted_at unique
+
+    - order_products 
+        id uuid
+        product_id uuid
+        count integer
+        discount_price float //for each
+        price float // for each
+        order_id uuid foreign key
+        created_at default
+        updated_at default
+        deleted_at integer default 0
+
+    - order_status_notes
+        id uuid
+        order_id uuid foreign key
+        status enum[waiting_for_payment, collecting, delivery, waiting_on_branch, finished, cancelled]
+        user_id uuid
+        reason varchar(100)
+        created_at default
+        // create, getAll
+
+5. AuthService
+    otp redis
+    
+    // 1. ChangeStatus(orderId,statusId, userID, userType)
+// 2. ChangePaidStatus(orderID,amount) (paid=true,statusNotes,orderStatus change to collecting)

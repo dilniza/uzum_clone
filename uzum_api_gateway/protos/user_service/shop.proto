@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option go_package = "genproto/user_service";
+
+package user_service;
+
+service ShopService {
+    rpc Create(CreateShop) returns (Shop) {}
+    rpc GetByID(ShopPrimaryKey) returns (Shop) {}
+    rpc GetList(GetListShopRequest) returns (GetListShopResponse) {}
+    rpc Update(UpdateShop) returns (Shop) {}
+    rpc Delete(ShopPrimaryKey) returns (Empty4) {}
+}
+
+message Empty4 {}
+
+message ShopPrimaryKey {
+    string id = 1;
+}
+
+message CreateShop {
+    string slug = 1;
+    string phone = 2;
+    string name_uz = 3;
+    string name_ru = 4;
+    string name_en = 5;
+    string description_uz = 6;
+    string description_ru = 7;
+    string description_en = 8;
+    string location = 9;
+    string currency = 10;
+    repeated string payment_types = 11;
+}
+
+message Shop {
+    string id = 1;
+    string slug = 2;
+    string phone = 3;
+    string name_uz = 4;
+    string name_ru = 5;
+    string name_en = 6;
+    string description_uz = 7;
+    string description_ru = 8;
+    string description_en = 9;
+    string location = 10;
+    string currency = 11;
+    repeated string payment_types = 12;
+    string created_at = 13;
+    string updated_at = 14;
+    string deleted_at = 15;
+}
+
+message UpdateShop {
+    string id = 1;
+    string slug = 2;
+    string phone = 3;
+    string name_uz = 4;
+    string name_ru = 5;
+    string name_en = 6;
+    string description_uz = 7;
+    string description_ru = 8;
+    string description_en = 9;
+    string location = 10;
+    string currency = 11;
+    repeated string payment_types = 12;
+}
+
+message GetListShopRequest {
+    uint64 page = 1;
+    uint64 limit = 2;
+    string search = 3;
+}
+
+message GetListShopResponse {
+    int64 count = 1;
+    repeated Shop shops = 2;
+}

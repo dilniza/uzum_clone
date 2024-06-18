@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type handler struct {
+type Handler struct {
 	log        logger.Logger
 	grpcClient *grpc_client.GrpcClient
 	cfg        config.Config
@@ -57,15 +57,15 @@ var (
 )
 
 // New ...
-func New(c *HandlerConfig) *handler {
-	return &handler{
+func New(c *HandlerConfig) *Handler {
+	return &Handler{
 		log:        c.Logger,
 		grpcClient: c.GrpcClient,
 		cfg:        c.Cfg,
 	}
 }
 
-func handleGrpcErrWithDescription(c *gin.Context, l logger.Logger, err error, message string) bool {
+func HandleGrpcErrWithDescription(c *gin.Context, l logger.Logger, err error, message string) bool {
 	st, ok := status.FromError(err)
 	if !ok || st.Code() == codes.Internal {
 		c.JSON(http.StatusInternalServerError, models.ErrorWithDescription{

@@ -2,6 +2,7 @@ package helper
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"time"
 
@@ -69,3 +70,12 @@ func ValidateUsername(username string) error {
 	return nil
 }
 
+func ValidateEmailAddress(email string) error {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+
+	if !emailRegex.MatchString(email) {
+		return fmt.Errorf("email address %s is not valid", email)
+	}
+
+	return nil
+}

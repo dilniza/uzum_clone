@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+option go_package = "genproto/user_service";
+
+package user_service;
+
+service CustomerService {
+    rpc Create(CreateCustomer) returns (Customer) {}
+    rpc GetByID(CustomerPrimaryKey) returns (Customer) {}
+    rpc GetList(GetListCustomerRequest) returns (GetListCustomerResponse) {}
+    rpc Update(UpdateCustomer) returns (Customer) {}
+    rpc Delete(CustomerPrimaryKey) returns (Empty) {}
+}
+
+message Empty {}
+
+message CustomerPrimaryKey {
+    string id = 1;
+}
+
+message CreateCustomer {
+    string phone = 1;
+    string email = 2;
+    string languange = 3;
+    string date_of_birth = 4;
+    string gender = 5;
+    string firstname = 6;
+    string lastname = 7;
+}
+
+message Customer {
+    string id = 1;
+    string phone = 2;
+    string email = 3;
+    string languange = 4;
+    string date_of_birth = 5;
+    string gender = 6;
+    string created_at = 7;
+    string updated_at = 8;
+    int64  deleted_at = 9;
+    string firstname = 10;
+    string lastname = 11;
+}
+
+message UpdateCustomer {
+    string id = 1;
+    string phone = 2;
+    string email = 3;
+    string languange = 4;
+    string date_of_birth = 5;
+    string firstname = 6;
+    string lastname = 7;
+}
+
+message GetCustomer {
+    string id = 1;
+    string phone = 2;
+    string email = 3;
+    string languange = 4;
+    string date_of_birth = 5;
+    string gender = 6;
+    string created_at = 7;
+    string updated_at = 8;
+    int64  deleted_at = 9;
+    string firstname = 10;
+    string lastname = 11;
+}
+
+message GetListCustomerRequest {
+    uint64 page = 1;
+    uint64 limit = 2;
+    string search = 3;
+}
+
+message GetListCustomerResponse {
+    int64 Count = 1;
+    repeated Customer Customers = 2;
+}
