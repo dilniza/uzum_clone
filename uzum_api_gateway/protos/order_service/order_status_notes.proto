@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package genproto;
+
+option go_package = "genproto/order_service";
+
+service OrderStatusService {
+
+    rpc Create(CreateStatusRequest) returns (GetOrderStatusResponse);
+    rpc GetByID(OrderPrimaryKeyRequest) returns (GetOrderStatusResponse);
+    rpc PUTCH(OrderPrimaryStatusKeyRequest) returns (GetOrderStatusResponse);
+    rpc GetStatusByID(OrderPrimaryStatusKeyRequest) returns (GetOrderStatusResponse);
+
+   // rpc GetALL(GetAllOrderStatusRequest) returns (GetAllOrderStatusResponse) {}   
+    //rpc Update(UpdateOrder) returns (GetOrder);
+    //rpc Delete(OrderPrimaryKey) returns (Empty);
+}
+
+message CreateStatusRequest {   
+    string id =1;
+    string order_id=2;
+    string status=3;
+    string user_id =4;
+    string reason =5;
+    string created_at = 7;
+    string updated_at = 8;
+    int32 deleted_at = 9;
+}
+
+message OrderPrimaryKeyRequest {
+    string id = 1;
+}
+
+message OrderPrimaryStatusKeyRequest {
+    string order_id = 1;
+    string status = 2;
+}
+
+message GetOrderStatusResponse {
+    string id =1;
+    string order_id=2;
+    string status=3;
+    string user_id =4;
+    string reason =5;
+}
+
+

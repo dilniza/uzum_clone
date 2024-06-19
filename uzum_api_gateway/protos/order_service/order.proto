@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package genproto;
+
+option go_package = "genproto/order_service";
+
+service OrderService {
+
+    rpc Create(CreateOrder) returns (GetOrder);
+    rpc GetByID(OrderPrimaryKey) returns (GetOrder) {}
+   // rpc GetALL(GetListCategoryRequest) returns (GetListCategoryResponse) {}   
+    //rpc Update(UpdateOrder) returns (GetOrder);
+    //rpc Delete(OrderPrimaryKey) returns (Empty);
+}
+
+message OrderPrimaryKey {
+    string id = 1;
+}
+
+message CreateOrder {
+    string id = 1;
+    string external_id = 2;
+    string type = 3;
+    string customer_phone = 4;
+    string customer_name = 5;
+    string customer_id = 6;
+    string payment_type = 7;
+    string status = 8;
+    string to_address = 9;
+    Location to_location = 10;
+    double discount_amount = 11;
+    double amount = 12;
+    double delivery_price = 13;
+    bool paid = 14;
+    string courier_id = 15;
+    string courier_phone = 16;
+    string courier_name = 17;
+    string created_at = 18;
+    string updated_at = 19;
+    string deleted_at = 20;
+}
+
+message UpdateOrder {
+    string id = 1;
+    string external_id = 2;
+    string type = 3;
+    string customer_phone = 4;
+    string customer_name = 5;
+    string customer_id = 6;
+    string payment_type = 7;
+    string status = 8;
+    string to_address = 9;
+    Location to_location = 10;
+    double discount_amount = 11;
+    double amount = 12;
+    double delivery_price = 13;
+    bool paid = 14;
+    string courier_id = 15;
+    string courier_phone = 16;
+    string courier_name = 17;
+    string created_at = 18;
+    string updated_at = 19;
+    string deleted_at = 20;
+}
+
+message GetOrder {
+    string id = 1;
+    string external_id = 2;
+    string type = 3;
+    string customer_phone = 4;
+    string customer_name = 5;
+    string customer_id = 6;
+    string payment_type = 7;
+    string status = 8;
+    string to_address = 9;
+    repeated Location to_location = 10;
+    double discount_amount = 11;
+    double amount = 12;
+    double delivery_price = 13;
+    bool paid = 14;
+    string courier_id = 15;
+    string courier_phone = 16;
+    string courier_name = 17;
+    string created_at = 18;
+    string updated_at = 19;
+    string deleted_at = 20;
+}
+
+message Location {
+    double longitude = 1;
+    double latitude = 2;
+}
+
+message GetListCategoryRequest {
+    int64 offset = 1;
+    int64 limit = 2;
+    string search = 3;
+}
+
+message GetListCategoryResponse {
+    int64 Count = 1;
+    repeated GetOrder Categories = 2;
+}
+

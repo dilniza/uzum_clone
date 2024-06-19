@@ -72,6 +72,13 @@ definitions:
       out_price:
         type: number
     type: object
+  catalog_service.CreateProductCategory:
+    properties:
+      category_id:
+        type: string
+      product_id:
+        type: string
+    type: object
   catalog_service.CreateProductReview:
     properties:
       customer_id:
@@ -91,6 +98,15 @@ definitions:
         type: array
       Count:
         type: integer
+    type: object
+  catalog_service.GetAllProductCategoryResponse:
+    properties:
+      Count:
+        type: integer
+      ProductCategorys:
+        items:
+          $ref: '#/definitions/catalog_service.ProductCategory'
+        type: array
     type: object
   catalog_service.GetAllProductResponse:
     properties:
@@ -149,6 +165,15 @@ definitions:
       slug:
         type: string
       updated_at:
+        type: string
+    type: object
+  catalog_service.ProductCategory:
+    properties:
+      category_id:
+        type: string
+      id:
+        type: string
+      product_id:
         type: string
     type: object
   catalog_service.ProductReview:
@@ -220,6 +245,15 @@ definitions:
       out_price:
         type: number
     type: object
+  catalog_service.UpdateProductCategory:
+    properties:
+      category_id:
+        type: string
+      id:
+        type: string
+      product_id:
+        type: string
+    type: object
   catalog_service.UpdateProductReview:
     properties:
       customer_id:
@@ -233,9 +267,115 @@ definitions:
       text:
         type: string
     type: object
+  models.Response:
+    properties:
+      id: {}
+    type: object
   models.ResponseError:
     properties:
       error: {}
+    type: object
+  models.ResponseSuccess:
+    properties:
+      data: {}
+      metadata: {}
+    type: object
+  order_service.CreateOrder:
+    properties:
+      amount:
+        type: number
+      courier_id:
+        type: string
+      courier_name:
+        type: string
+      courier_phone:
+        type: string
+      created_at:
+        type: string
+      customer_id:
+        type: string
+      customer_name:
+        type: string
+      customer_phone:
+        type: string
+      deleted_at:
+        type: string
+      delivery_price:
+        type: number
+      discount_amount:
+        type: number
+      external_id:
+        type: string
+      id:
+        type: string
+      paid:
+        type: boolean
+      payment_type:
+        type: string
+      status:
+        type: string
+      to_address:
+        type: string
+      to_location:
+        $ref: '#/definitions/order_service.Location'
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  order_service.CreateOrderProducts:
+    properties:
+      count:
+        type: integer
+      created_at:
+        type: string
+      deleted_at:
+        type: integer
+      discount_price:
+        type: number
+      id:
+        type: string
+      order_id:
+        type: string
+      price:
+        type: number
+      product_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  order_service.CreateStatusRequest:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: integer
+      id:
+        type: string
+      order_id:
+        type: string
+      reason:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  order_service.Location:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  order_service.OrderPrimaryStatusKeyRequest:
+    properties:
+      order_id:
+        type: string
+      status:
+        type: string
     type: object
   user_service.Branch:
     properties:
@@ -1024,6 +1164,135 @@ paths:
       summary: Get List user
       tags:
       - user
+  /ProductCategory:
+    post:
+      consumes:
+      - application/json
+      description: API for creating a category category
+      parameters:
+      - description: category category
+        in: body
+        name: ProductCategory
+        required: true
+        schema:
+          $ref: '#/definitions/catalog_service.CreateProductCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.ProductCategory'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a category category
+      tags:
+      - category
+  /ProductCategory/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API for deleting a category category by ID
+      parameters:
+      - description: category category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.Empty'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a category category by ID
+      tags:
+      - category
+    get:
+      consumes:
+      - application/json
+      description: API for getting a single category category by ID
+      parameters:
+      - description: category category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.ProductCategory'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a single category category by ID
+      tags:
+      - category
+    put:
+      consumes:
+      - application/json
+      description: API for updating a category category by ID
+      parameters:
+      - description: category category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: category category
+        in: body
+        name: ProductCategory
+        required: true
+        schema:
+          $ref: '#/definitions/catalog_service.UpdateProductCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.ProductCategory'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a category category by ID
+      tags:
+      - category
   /ProductReview:
     post:
       consumes:
@@ -1657,6 +1926,44 @@ paths:
       summary: Get a single customer by ID
       tags:
       - customer
+  /getlistProductCategory:
+    get:
+      consumes:
+      - application/json
+      description: API for getting list category categorys
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/catalog_service.GetAllProductCategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get List Product Categorys
+      tags:
+      - category
   /getlistProductReview:
     get:
       consumes:
@@ -1733,6 +2040,247 @@ paths:
       summary: Get List Customer
       tags:
       - customer
+  /order:
+    post:
+      consumes:
+      - application/json
+      description: API for creating a order_service
+      parameters:
+      - description: Order_Product
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/order_service.CreateOrderProducts'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ResponseSuccess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      summary: Create Order_product
+      tags:
+      - order_service
+  /order-status:
+    patch:
+      description: This API updates the status of an order by ID
+      parameters:
+      - description: Order Status
+        in: body
+        name: orders
+        required: true
+        schema:
+          $ref: '#/definitions/order_service.OrderPrimaryStatusKeyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update order status by ID
+      tags:
+      - order_status
+    post:
+      description: This API create the status of an order
+      parameters:
+      - description: Order Status
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/order_service.CreateStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update order status by ID
+      tags:
+      - order_status
+  /order-status/{id}:
+    get:
+      description: This api get a order by id
+      parameters:
+      - in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get by id a orderstatus
+      tags:
+      - order_status
+  /order-statusp/{id}:
+    get:
+      description: This API gets an order by ID
+      parameters:
+      - description: Order Status ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get by id a orderstatusputch
+      tags:
+      - order_statusp
+  /order/{id}:
+    get:
+      description: This api get a order by id
+      parameters:
+      - in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get by id a order
+      tags:
+      - order_service
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: API for creating a order
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/order_service.CreateOrder'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ResponseSuccess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      summary: Create Order
+      tags:
+      - orders
+  /orders/{id}:
+    get:
+      description: This api get a order by id
+      parameters:
+      - in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get by id a order
+      tags:
+      - orders
   /product:
     post:
       consumes:

@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package genproto;
+
+option go_package = "genproto/order_service";
+
+service OrderProductsService {
+
+    rpc Create(CreateOrderProducts) returns (GetOrderProducts);
+    rpc GetByID(OrderProductsPrimaryKey) returns (GetOrderProducts) {}
+    rpc GetALL(GetAllOrderRequest) returns (GetAllOrderResponse) {}   
+    rpc Update(UpdateOrderProducts) returns (GetOrderProducts);
+    rpc Delete(OrderProductsPrimaryKey) returns (EmptyOrder);
+}
+
+message EmptyOrder {}
+
+message OrderProductsPrimaryKey {
+    string id = 1;
+}
+
+   message CreateOrderProducts {
+    string id = 1;
+    string product_id = 2;
+    int32 count=3;
+    double discount_price = 4;
+    double price = 5;
+    string order_id = 6;
+    string created_at = 7;
+    string updated_at = 8;
+    int32 deleted_at = 9;
+}
+
+message UpdateOrderProducts {
+    string id = 1;
+    string product_id = 2;
+    int32 count=3;
+    double discount_price = 4;
+    double price = 5;
+    string order_id = 6;
+    string created_at = 7;
+    string updated_at = 8;
+    int32 deleted_at = 9;
+}
+
+message GetOrderProducts {
+    string id = 1;
+    string product_id = 2;
+    int32 count=3;
+    double discount_price = 4;
+    double price = 5;
+    string order_id = 6;
+   
+}
+
+message GetAllOrderRequest {
+    int64 offset = 1;
+    int64 limit = 2;
+    string search = 3;
+}
+
+message GetAllOrderResponse {
+    int64 Count = 1;
+    repeated GetOrderProducts Categories = 2;
+}
+

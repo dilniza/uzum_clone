@@ -9,19 +9,19 @@ import (
 )
 
 // @Security ApiKeyAuth
-// @Router /getlistProductReview [GET]
-// @Summary Get List Category Reviews
-// @Description API for getting list category reviews
+// @Router /getlistProductCategory [GET]
+// @Summary Get List Product Categorys
+// @Description API for getting list category categorys
 // @Tags category
 // @Accept json
 // @Produce json
 // @Param limit query int false "Limit"
 // @Param offset query int false "Offset"
 // @Param search query string false "Search term"
-// @Success 200 {object} catalog_service.GetAllProductReviewResponse
+// @Success 200 {object} catalog_service.GetAllProductCategoryResponse
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) GetListProductReview(c *gin.Context) {
+func (h *Handler) GetListProductCategory(c *gin.Context) {
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
 		HandleGrpcErrWithDescription(c, h.log, err, "Invalid limit")
@@ -36,15 +36,15 @@ func (h *Handler) GetListProductReview(c *gin.Context) {
 
 	search := c.DefaultQuery("search", "")
 
-	in := &catalog_service.GetAllProductReviewRequest{
+	in := &catalog_service.GetAllProductCategoryRequest{
 		Limit:  int64(limit),
 		Offset: int64(offset),
 		Search: search,
 	}
 
-	resp, err := h.grpcClient.ProductReviewService().GetAll(c, in)
+	resp, err := h.grpcClient.ProductCategoryService().GetAll(c, in)
 	if err != nil {
-		HandleGrpcErrWithDescription(c, h.log, err, "error while getting all category reviews")
+		HandleGrpcErrWithDescription(c, h.log, err, "error while getting all category categorys")
 		return
 	}
 
@@ -52,20 +52,20 @@ func (h *Handler) GetListProductReview(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /ProductReview [POST]
-// @Summary Create a category review
-// @Description API for creating a category review
+// @Router /ProductCategory [POST]
+// @Summary Create a category category
+// @Description API for creating a category category
 // @Tags category
 // @Accept json
 // @Produce json
-// @Param ProductReview body catalog_service.CreateProductReview true "category review"
-// @Success 200 {object} catalog_service.ProductReview
+// @Param ProductCategory body catalog_service.CreateProductCategory true "category category"
+// @Success 200 {object} catalog_service.ProductCategory
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) CreateProductReview(c *gin.Context) {
+func (h *Handler) CreateProductCategory(c *gin.Context) {
 	var (
-		req  catalog_service.CreateProductReview
-		resp *catalog_service.ProductReview
+		req  catalog_service.CreateProductCategory
+		resp *catalog_service.ProductCategory
 		err  error
 	)
 
@@ -74,9 +74,9 @@ func (h *Handler) CreateProductReview(c *gin.Context) {
 		return
 	}
 
-	resp, err = h.grpcClient.ProductReviewService().Create(c, &req)
+	resp, err = h.grpcClient.ProductCategoryService().Create(c, &req)
 	if err != nil {
-		HandleGrpcErrWithDescription(c, h.log, err, "error while creating category review")
+		HandleGrpcErrWithDescription(c, h.log, err, "error while creating category category")
 		return
 	}
 
@@ -84,30 +84,30 @@ func (h *Handler) CreateProductReview(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /ProductReview/{id} [GET]
-// @Summary Get a single category review by ID
-// @Description API for getting a single category review by ID
+// @Router /ProductCategory/{id} [GET]
+// @Summary Get a single category category by ID
+// @Description API for getting a single category category by ID
 // @Tags category
 // @Accept json
 // @Produce json
-// @Param id path string true "category review ID"
-// @Success 200 {object} catalog_service.ProductReview
+// @Param id path string true "category category ID"
+// @Success 200 {object} catalog_service.ProductCategory
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) GetProductReviewByID(c *gin.Context) {
+func (h *Handler) GetProductCategoryByID(c *gin.Context) {
 	var (
 		id   = c.Param("id")
-		resp *catalog_service.ProductReview
+		resp *catalog_service.ProductCategory
 		err  error
 	)
 
-	req := &catalog_service.ProductReviewPrimaryKey{
+	req := &catalog_service.ProductCategoryPrimaryKey{
 		Id: id,
 	}
 
-	resp, err = h.grpcClient.ProductReviewService().GetByID(c, req)
+	resp, err = h.grpcClient.ProductCategoryService().GetByID(c, req)
 	if err != nil {
-		HandleGrpcErrWithDescription(c, h.log, err, "error while getting category review by id")
+		HandleGrpcErrWithDescription(c, h.log, err, "error while getting category category by id")
 		return
 	}
 
@@ -115,22 +115,22 @@ func (h *Handler) GetProductReviewByID(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /ProductReview/{id} [PUT]
-// @Summary Update a category review by ID
-// @Description API for updating a category review by ID
+// @Router /ProductCategory/{id} [PUT]
+// @Summary Update a category category by ID
+// @Description API for updating a category category by ID
 // @Tags category
 // @Accept json
 // @Produce json
-// @Param id path string true "category review ID"
-// @Param ProductReview body catalog_service.UpdateProductReview true "category review"
-// @Success 200 {object} catalog_service.ProductReview
+// @Param id path string true "category category ID"
+// @Param ProductCategory body catalog_service.UpdateProductCategory true "category category"
+// @Success 200 {object} catalog_service.ProductCategory
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) UpdateProductReview(c *gin.Context) {
+func (h *Handler) UpdateProductCategory(c *gin.Context) {
 	var (
 		id   = c.Param("id")
-		req  catalog_service.UpdateProductReview
-		resp *catalog_service.ProductReview
+		req  catalog_service.UpdateProductCategory
+		resp *catalog_service.ProductCategory
 		err  error
 	)
 
@@ -140,9 +140,9 @@ func (h *Handler) UpdateProductReview(c *gin.Context) {
 	}
 
 	req.Id = id
-	resp, err = h.grpcClient.ProductReviewService().Update(c, &req)
+	resp, err = h.grpcClient.ProductCategoryService().Update(c, &req)
 	if err != nil {
-		HandleGrpcErrWithDescription(c, h.log, err, "error while updating category review")
+		HandleGrpcErrWithDescription(c, h.log, err, "error while updating category category")
 		return
 	}
 
@@ -150,30 +150,30 @@ func (h *Handler) UpdateProductReview(c *gin.Context) {
 }
 
 // @Security ApiKeyAuth
-// @Router /ProductReview/{id} [DELETE]
-// @Summary Delete a category review by ID
-// @Description API for deleting a category review by ID
+// @Router /ProductCategory/{id} [DELETE]
+// @Summary Delete a category category by ID
+// @Description API for deleting a category category by ID
 // @Tags category
 // @Accept json
 // @Produce json
-// @Param id path string true "category review ID"
+// @Param id path string true "category category ID"
 // @Success 200 {object} catalog_service.Empty
 // @Failure 404 {object} models.ResponseError
 // @Failure 500 {object} models.ResponseError
-func (h *Handler) DeleteProductReview(c *gin.Context) {
+func (h *Handler) DeleteProductCategory(c *gin.Context) {
 	var (
 		id   = c.Param("id")
 		err  error
 		resp *catalog_service.Empty
 	)
 
-	req := &catalog_service.ProductReviewPrimaryKey{
+	req := &catalog_service.ProductCategoryPrimaryKey{
 		Id: id,
 	}
 
-	resp, err = h.grpcClient.ProductReviewService().Delete(c, req)
+	resp, err = h.grpcClient.ProductCategoryService().Delete(c, req)
 	if err != nil {
-		HandleGrpcErrWithDescription(c, h.log, err, "error while deleting category review")
+		HandleGrpcErrWithDescription(c, h.log, err, "error while deleting category category")
 		return
 	}
 

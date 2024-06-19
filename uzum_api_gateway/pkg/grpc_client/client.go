@@ -2,6 +2,7 @@ package grpc_client
 
 import (
 	pc "api/genproto/catalog_service"
+	os "api/genproto/order_service"
 	us "api/genproto/user_service"
 	"log"
 
@@ -25,6 +26,10 @@ type GrpcClientI interface {
 	SellerServive() us.SellerServiceClient
 	BranchService() us.BranchServiceClient
 	ShopService() us.ShopServiceClient
+
+	ProducOrderService() os.OrderProductsServiceClient
+	OrderService() os.OrderServiceServer
+	OrderStatus() os.OrderStatusServiceClient
 }
 
 // GrpcClient ...
@@ -54,17 +59,32 @@ func New(cfg config.Config) (*GrpcClient, error) {
 			cfg.UserServiceHost, cfg.UserServicePort, err)
 	}
 
+	connOrder, err := grpc.NewClient(
+		fmt.Sprintf("%s:%s", cfg.OrderServiceHost, cfg.OrderServicePort),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		return nil, fmt.Errorf("order service dial hsot:%s port :%s err:%s",
+			cfg.OrderServiceHost, cfg.OrderServicePort, err)
+	}
+
 	return &GrpcClient{
 		cfg: cfg,
 		connections: map[string]interface{}{
-			"catalog_service": pc.NewCategoryServiceClient(connCategory),
-			"product_service": pc.NewProductServiceClient(connCategory),
+			"catalog_service":          pc.NewCategoryServiceClient(connCategory),
+			"product_service":          pc.NewProductServiceClient(connCategory),
+			"product_review_service":   pc.NewProductReviewServiceClient(connCategory),
+			"product_category_service": pc.NewProductCategoryServiceClient(connCategory),
 
 			"user_service": us.NewCustomerServiceClient(connUser),
 			"system_user":  us.NewUsServiceClient(connUser),
 			"seller":       us.NewSellerServiceClient(connUser),
 			"branch":       us.NewBranchServiceClient(connUser),
 			"shop":         us.NewShopServiceClient(connUser),
+
+			"order_product_service": os.NewOrderProductsServiceClient(connOrder),
+			"order_service":         os.NewOrderServiceClient(connOrder),
+			"order_status_service":  os.NewOrderStatusServiceClient(connOrder),
 		},
 	}, nil
 }
@@ -128,4 +148,16 @@ func (g *GrpcClient) ShopService() us.ShopServiceClient {
 		return nil
 	}
 	return client
+}
+
+func (o *GrpcClient) ProducOrderService() os.OrderProductsServiceClient {
+	return o.connections["order_product_service"].(os.OrderProductsServiceClient)
+}
+
+func (o *GrpcClient) OrderService() os.OrderServiceClient {
+	return o.connections["order_service"].(os.OrderServiceClient)
+}
+
+func (o *GrpcClient) OrderStatus() os.OrderStatusServiceClient {
+	return o.connections["order_status_service"].(os.OrderStatusServiceClient)
 }
